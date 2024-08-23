@@ -98,7 +98,7 @@ When your inventory grows in complexity, consider documenting it. Describe the d
 
 ## Example Structure for a Large Enterprise Setup
 
-Let’s consider an example structure for a large enterprise setup, where you have multiple environments, several application stacks, and diverse configurations.
+Let's consider a sample architecture in an enterprise environment where the setup is on a very large scale: there are many environments, a number of application stacks, and diversified configurations.
 
 ```yaml
 inventory/
