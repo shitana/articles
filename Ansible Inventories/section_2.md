@@ -1,13 +1,13 @@
 # Section 2: Organizing Inventory for Large-Scale Deployments
 
-In this section, we'll discuss how to effectively organize your Ansible inventory to manage large-scale deployments. Proper organization not only makes your inventory more maintainable but also ensures that your automation workflows remain efficient and scalable as your infrastructure grows.
+In this chapter, we discuss how to organize your Ansible inventory to handle deploying to tens of thousands of machines. Good organization is about making your inventory maintainable, but it also means you keep your automation lean and scalable for your entire infrastructure's lifespan.
 
 ## Best Practices for Organizing Inventory Files
 
-When dealing with a large and complex infrastructure, it’s essential to have a clear and consistent structure for your inventory files. Here are some best practices:
+Clearly and consistently structure your inventory files when dealing with a large and complex infrastructure. Here are some best practices:
 
 ### 1. Use a Directory Structure
-- Instead of keeping everything in a single file, break down your inventory into multiple files organized within a directory. This makes it easier to manage and locate specific groups or hosts.
+Do not put everything in a single file; instead, subdivide your inventory into multiple files organized within a directory. This way, it will be easier for you to manage and find any specific group or host.
 - For example, you might have a directory structure like this:
   ```
   inventory/
@@ -27,7 +27,7 @@ When dealing with a large and complex infrastructure, it’s essential to have a
 - This structure separates environments (e.g., production, staging) and uses group and host variable files for more granular control.
 
 ### 2. Leverage Group Variables
-- Group variables are a powerful feature that allows you to define variables once and apply them to all hosts in a group. This reduces redundancy and makes your playbooks more concise.
+The group variables provide the power to define a variable one time and apply it to all hosts in a group. This will help in reducing redundancy and make your playbooks shorter.
 - For example, if all your web servers need the same Nginx configuration, you can define this in a group variable file:
   ```yaml
   # inventory/production/group_vars/webservers.yml
@@ -35,7 +35,7 @@ When dealing with a large and complex infrastructure, it’s essential to have a
   ```
 
 ### 3. Define Host-Specific Variables
-- In large deployments, some hosts may require unique configurations. Use host-specific variable files to handle these exceptions.
+Some really big deployments will need settings to be unique for certain hosts. For these exceptional cases, use files with variables specific to a host.
 - Host variables can be stored in a `host_vars` directory, with each file named after the host:
   ```yaml
   # inventory/production/host_vars/web01.yml
@@ -43,7 +43,7 @@ When dealing with a large and complex infrastructure, it’s essential to have a
   ```
 
 ### 4. Use Group Nesting
-- Group nesting allows you to create hierarchical relationships between groups. For example, you might have a group for all web servers, and within that, subgroups for Nginx and Apache servers:
+Group nesting allows you to create hierarchical relationships between groups. For example, you might have a group for all web servers, and within it, use subgroups for Nginx and Apache servers:
   ```yaml
   all:
     children:
@@ -60,23 +60,41 @@ When dealing with a large and complex infrastructure, it’s essential to have a
 
 ## Structuring Inventory Files for Scalability and Maintainability
 
-As your infrastructure grows, maintaining a scalable inventory structure becomes increasingly important. Here are some strategies to help:
+As an infrastructure continues to grow over time, the need for such a scalable inventory structure becomes even more critical. Here's what can help:
 
 ### 1. Separate by Environment
-- Separate your inventory by environment (e.g., production, staging, development). This ensures that changes in one environment don’t inadvertently affect another.
-- This separation also allows for environment-specific configurations and variables, reducing the likelihood of errors when moving between environments.
+Keep your inventory divided by environment (for instance, Production, Staging, Development) so any changes in one zone do not inadvertently affect another.
+
+- This sort of segregation also allows settings and variables specific to the environment, thus further reducing the chances of errors that come from not transferring everything correctly between environments.
+```yaml
+# TODO How to use sperate inv with ansible-playbook
+
+```
 
 ### 2. Modularize Configurations
-- Keep your inventory modular by creating reusable configuration files. For example, you can create a base configuration file for all web servers and override specific settings in environment-specific files.
-- This modular approach makes it easier to update configurations across multiple environments or groups of hosts.
+Make them into reusable configuration files so that your inventory is kept modular. For example, there might be a basic configuration file for all web servers, and some specifics might be overridden in the files for particular environments.
+
+- This modular approach is very helpful in updating configurations across multiple environments or sets of hosts.
+
+```yaml
+# TODO How var could change from env to env
+
+```
 
 ### 3. Version Control Your Inventory
-- Store your inventory files in a version control system like Git. This allows you to track changes over time, collaborate with team members, and roll back to previous versions if needed.
-- Using version control also integrates well with CI/CD pipelines, ensuring that inventory changes are synchronized with your deployment workflows.
+Keep your inventory files in a version control system such as Git. That would enable you to keep changes over time, possibly track who might be editing what, collaborate with others within your team, and even roll back to earlier versions if push comes to shove.
+
+- Version control also integrates well with your CI/CD pipeline to make sure that inventory changes can synchronize with your deployment workflows.
+- The inventory could be a specific git repo that can be used by other project using git submodule 
 
 ### 4. Document Your Inventory Structure
-- As your inventory grows in complexity, it’s crucial to maintain clear documentation. This includes explaining the directory structure, the purpose of each group, and any specific conventions used.
-- Good documentation helps onboard new team members quickly and ensures that the inventory remains manageable as your team and infrastructure evolve.
+When your inventory grows in complexity, consider documenting it. Describe the directory structure, groups, and any specific conventions that you use.
+
+- Great documentation will make onboarding new team members easier, even after a lot of turnover over the years, and is more likely to help ensure inventory can continue to be manageable as your team and infrastructure evolve.
+```yaml
+# TODO How to add a significent comment
+
+```
 
 ## Example Structure for a Large Enterprise Setup
 
