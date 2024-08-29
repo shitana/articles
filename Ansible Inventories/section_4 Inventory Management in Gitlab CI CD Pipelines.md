@@ -1,4 +1,4 @@
-# Section 4: Inventory Management in CI/CD Pipelines
+# Section 4: Inventory Management in Gitlab CI/CD Pipelines
 
 In modern DevOps practices, integrating Ansible with Continuous Integration and Continuous Deployment (CI/CD) pipelines is essential for achieving automated, reliable, and consistent deployments. This section will focus specifically on integrating Ansible inventory management with GitLab CI, a popular CI/CD tool used by many organizations.
 
