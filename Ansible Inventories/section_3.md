@@ -24,6 +24,8 @@ pip install boto3 botocore
 
 #### Step 2: Configure AWS Credentials
 
+**Note**: There are more secure and scalable methods for authenticating to AWS, such as using IAM roles or AWS Secrets Manager. These methods will be covered in a separate article focusing on best practices for AWS authentication.
+
 Ensure that your AWS credentials are configured. This can be done by setting up the `~/.aws/credentials` file or by exporting the credentials as environment variables:
 
 ```bash
@@ -101,11 +103,7 @@ For organizations with a CMDB (Configuration Management Database), integrating i
 
 While built-in plugins cover many scenarios, there may be cases where you need a custom dynamic inventory script. These scripts can be written in Python or any language that outputs JSON.
 
-# Creating Custom Dynamic Inventory Scripts
-
-While built-in plugins cover many scenarios, there may be cases where you need a custom dynamic inventory script. These scripts can be written in Python or any language that outputs JSON. Custom scripts are particularly useful when dealing with specialized environments or systems that aren’t directly supported by Ansible’s existing inventory plugins.
-
-## Example: Custom Script for Docker Containers
+### Example: Custom Script for Docker Containers
 
 Here’s a basic example of a custom dynamic inventory script that lists Docker containers as hosts. This script queries Docker to list all running containers and returns them as an Ansible inventory.
 
@@ -139,9 +137,9 @@ if __name__ == "__main__":
     print(json.dumps(generate_inventory(), indent=2))
 ```
 
-## Step-by-Step Guide to Using the Custom Dynamic Inventory Script
+### Step-by-Step Guide to Using the Custom Dynamic Inventory Script
 
-### Step 1: Save the Script
+#### Step 1: Save the Script
 
 First, you need to save the script to a file in your Ansible project directory. Let’s assume you save it as `docker_inventory.py`.
 
@@ -153,7 +151,7 @@ chmod +x docker_inventory.py
 - **`docker_inventory.py`**: The name of your custom inventory script. You can choose any name as long as it’s executable and outputs JSON in the correct format.
 - **`chmod +x`**: This command makes the script executable.
 
-### Step 2: Test the Script
+#### Step 2: Test the Script
 
 Before integrating the script with Ansible, you should test it to ensure it works correctly. Run the script directly from the command line:
 
@@ -177,7 +175,7 @@ This should output the inventory in JSON format. For example, if you have two ru
 }
 ```
 
-### Step 3: Use the Script with Ansible
+#### Step 3: Use the Script with Ansible
 
 To use the custom script as a dynamic inventory in Ansible, simply reference it in the `ansible-playbook` command using the `-i` option:
 
@@ -190,7 +188,7 @@ Here’s what’s happening:
 - **`-i ./docker_inventory.py`**: Specifies the inventory to use. Ansible will execute the `docker_inventory.py` script, which will output the inventory in JSON format.
 - **`playbook.yml`**: The playbook you want to run against the Docker containers.
 
-### Step 4: Integrate with Ansible Configuration
+#### Step 4: Integrate with Ansible Configuration
 
 If you plan to use this dynamic inventory script regularly, you can integrate it into your Ansible configuration. Modify your `ansible.cfg` file to include the script as the default inventory source:
 
@@ -201,7 +199,7 @@ inventory = ./docker_inventory.py
 
 With this configuration, you no longer need to specify the `-i` option every time you run a playbook. Ansible will automatically use the `docker_inventory.py` script to generate the inventory.
 
-### Step 5: Advanced Customization
+#### Step 5: Advanced Customization
 
 You can further customize the script to include additional functionality, such as:
 
