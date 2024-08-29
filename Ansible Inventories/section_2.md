@@ -66,9 +66,8 @@ As an infrastructure continues to grow over time, the need for such a scalable i
 Keep your inventory divided by environment (for instance, Production, Staging, Development) so any changes in one zone do not inadvertently affect another.
 
 - This sort of segregation also allows settings and variables specific to the environment, thus further reducing the chances of errors that come from not transferring everything correctly between environments.
-```yaml
-# TODO How to use sperate inv with ansible-playbook
-
+```bash
+ansible-playbook -i inventory/production/hosts.yml site.yml
 ```
 
 ### 2. Modularize Configurations
@@ -77,8 +76,11 @@ Make them into reusable configuration files so that your inventory is kept modul
 - This modular approach is very helpful in updating configurations across multiple environments or sets of hosts.
 
 ```yaml
-# TODO How var could change from env to env
+# inventory/staging/group_vars/all.yml
+db_host: "db-staging.example.com"
 
+# inventory/production/group_vars/all.yml
+db_host: "db-prod.example.com"
 ```
 
 ### 3. Version Control Your Inventory
@@ -92,8 +94,12 @@ When your inventory grows in complexity, consider documenting it. Describe the d
 
 - Great documentation will make onboarding new team members easier, even after a lot of turnover over the years, and is more likely to help ensure inventory can continue to be manageable as your team and infrastructure evolve.
 ```yaml
-# TODO How to add a significent comment
-
+# This is the main web server group for production
+# Make sure to keep this updated with any new web servers
+webservers:
+  hosts:
+    web01:
+    web02:
 ```
 
 ## Example Structure for a Large Enterprise Setup
