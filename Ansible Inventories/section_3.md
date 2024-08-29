@@ -101,8 +101,13 @@ For organizations with a CMDB (Configuration Management Database), integrating i
 
 While built-in plugins cover many scenarios, there may be cases where you need a custom dynamic inventory script. These scripts can be written in Python or any language that outputs JSON.
 
-### Example: Custom Script for Docker Containers
-Here’s a basic example of a custom dynamic inventory script that lists Docker containers as hosts:
+# Creating Custom Dynamic Inventory Scripts
+
+While built-in plugins cover many scenarios, there may be cases where you need a custom dynamic inventory script. These scripts can be written in Python or any language that outputs JSON. Custom scripts are particularly useful when dealing with specialized environments or systems that aren’t directly supported by Ansible’s existing inventory plugins.
+
+## Example: Custom Script for Docker Containers
+
+Here’s a basic example of a custom dynamic inventory script that lists Docker containers as hosts. This script queries Docker to list all running containers and returns them as an Ansible inventory.
 
 ```python
 #!/usr/bin/env python
@@ -111,12 +116,13 @@ import subprocess
 import json
 
 def list_containers():
+    # Use Docker CLI to list all running container names
     result = subprocess.run(['docker', 'ps', '--format', '{{.Names}}'], stdout=subprocess.PIPE)
-    containers = result.stdout.decode('utf-8').strip().split('
-')
+    containers = result.stdout.decode('utf-8').strip().split('\n')
     return containers
 
 def generate_inventory():
+    # Generate inventory structure expected by Ansible
     containers = list_containers()
     inventory = {
         "all": {
@@ -129,10 +135,85 @@ def generate_inventory():
     return inventory
 
 if __name__ == "__main__":
+    # Print the inventory in JSON format
     print(json.dumps(generate_inventory(), indent=2))
 ```
 
-- This script lists all running Docker containers and sets them as hosts in the inventory with Docker as the connection method.
+## Step-by-Step Guide to Using the Custom Dynamic Inventory Script
+
+### Step 1: Save the Script
+
+First, you need to save the script to a file in your Ansible project directory. Let’s assume you save it as `docker_inventory.py`.
+
+```bash
+touch docker_inventory.py
+chmod +x docker_inventory.py
+```
+
+- **`docker_inventory.py`**: The name of your custom inventory script. You can choose any name as long as it’s executable and outputs JSON in the correct format.
+- **`chmod +x`**: This command makes the script executable.
+
+### Step 2: Test the Script
+
+Before integrating the script with Ansible, you should test it to ensure it works correctly. Run the script directly from the command line:
+
+```bash
+./docker_inventory.py
+```
+
+This should output the inventory in JSON format. For example, if you have two running Docker containers named `web01` and `db01`, the output might look like this:
+
+```json
+{
+  "all": {
+    "hosts": [
+      "web01",
+      "db01"
+    ],
+    "vars": {
+      "ansible_connection": "docker"
+    }
+  }
+}
+```
+
+### Step 3: Use the Script with Ansible
+
+To use the custom script as a dynamic inventory in Ansible, simply reference it in the `ansible-playbook` command using the `-i` option:
+
+```bash
+ansible-playbook -i ./docker_inventory.py playbook.yml
+```
+
+Here’s what’s happening:
+
+- **`-i ./docker_inventory.py`**: Specifies the inventory to use. Ansible will execute the `docker_inventory.py` script, which will output the inventory in JSON format.
+- **`playbook.yml`**: The playbook you want to run against the Docker containers.
+
+### Step 4: Integrate with Ansible Configuration
+
+If you plan to use this dynamic inventory script regularly, you can integrate it into your Ansible configuration. Modify your `ansible.cfg` file to include the script as the default inventory source:
+
+```ini
+[defaults]
+inventory = ./docker_inventory.py
+```
+
+With this configuration, you no longer need to specify the `-i` option every time you run a playbook. Ansible will automatically use the `docker_inventory.py` script to generate the inventory.
+
+### Step 5: Advanced Customization
+
+You can further customize the script to include additional functionality, such as:
+
+- **Group Containers by Labels**: Modify the script to group containers based on Docker labels. This is useful if you want to apply different roles or tasks to different sets of containers.
+  
+- **Include Additional Variables**: Pull more information from the Docker API (e.g., container IP addresses, environment variables) and include them in the inventory. This can be done by enhancing the `list_containers()` function to fetch more details.
+
+- **Error Handling**: Add error handling to manage scenarios where Docker is not running, or no containers are available.
+
+### Summary
+
+Using a custom dynamic inventory script like the `docker_inventory.py` script allows you to seamlessly manage and automate Docker containers with Ansible. This approach is flexible and can be tailored to fit complex or specialized environments that are not covered by Ansible's default inventory plugins. By following the steps above, you can easily integrate and use this script within your Ansible workflows.
 
 ## Grouping Strategies: Nested Groups and Host Patterns
 
