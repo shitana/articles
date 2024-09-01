@@ -153,7 +153,3 @@ To ensure smooth and reliable deployments with GitLab CI and Ansible, consider t
 - **Monitor and Rollback**: Use GitLab’s monitoring and rollback features to keep track of deployments and quickly revert changes if something goes wrong.
 
 By following these guidelines, you can create a robust and flexible CI/CD pipeline that integrates seamlessly with Ansible, ensuring reliable and efficient deployments across your environments.
-
----
-
-This concludes Section 4, focusing on integrating Ansible inventory management with GitLab CI. Let me know if you need further details or any adjustments!
