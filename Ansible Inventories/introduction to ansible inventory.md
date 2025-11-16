@@ -1,4 +1,4 @@
-# Introduction
+# Introduction 
 
 In today's fast-evolving IT ecosystem, automation can no longer be treated as just another add-on that companies can afford to deal with. Ansible has emerged to be one of the most potent weapons in an organization's arsenal, leading to the automation of infrastructure provisioning and application deployment. The more your company is leaning on Ansible, the more advanced the strategies must get beyond mere playbooks and roles.
 
